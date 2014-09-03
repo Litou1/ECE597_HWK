@@ -8,7 +8,7 @@ N="P9_12" S="P9_14" W="P9_16" E="P9_18" C="P9_22"
 
 Corresponding LED pins
 
-"P9_11","P9_13","P9_15","P9_26"
+"P9_11","P9_13","P9_15","P9_17"
 
 All inputs are set to pulldown.
 

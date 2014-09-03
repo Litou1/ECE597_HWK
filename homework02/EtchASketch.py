@@ -9,7 +9,7 @@ W="P9_16";
 E="P9_18";
 C="P9_22";
 button_List=[N,S,W,E,C]
-LED_list=["P9_11","P9_13","P9_15","P9_26"]
+LED_list=["P9_11","P9_13","P9_15","P9_17"]
 # set up input and output pins
 for i in range(len(button_List)):
     GPIO.setup(button_List[i], GPIO.IN,pull_up_down=GPIO.PUD_DOWN)
