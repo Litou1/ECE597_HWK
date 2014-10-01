@@ -1,5 +1,7 @@
 # usage: python EtchASketch.py <size of the board> 
 # run the led matrix pin C to P9_19 (SCL) and pin D to P9_20 (SDA)
+# wire eQEP1A to P8_35 and eQEP1B to P8_33
+# wire eQEP2A to P8_12 and eQEP1B to P8_11
 # from Tkinter import *
 import argparse
 from time import sleep
