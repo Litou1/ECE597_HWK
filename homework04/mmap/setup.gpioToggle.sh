@@ -1,4 +1,5 @@
 #!/bin/bash
+# initial setups
 # Set up gpio 7 2 to read and gpio 3 15 to write
 cd /sys/class/gpio
 
