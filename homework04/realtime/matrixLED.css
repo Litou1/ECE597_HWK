@@ -42,9 +42,9 @@ body {
 	border: 1px solid #ee0000;
 	background-color: red;
 }
-.yellow {
-	border: 1px solid #eeee00;
-	background-color: yellow;
+.orange {
+	border: 1px solid #ffa500;
+	background-color: orange;
 
 #i2cNum {
 	text-align: right; 
