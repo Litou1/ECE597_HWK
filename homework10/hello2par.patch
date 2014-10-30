@@ -1,0 +1,150 @@
+From 1c6dd39cd58d7b369e14d5c8b095cdbab2f3ca65 Mon Sep 17 00:00:00 2001
+From: Leihao <weil@rose-hulman.edu>
+Date: Thu, 30 Oct 2014 14:38:22 -0400
+Subject: [PATCH 1/2] Files for hello1 kernel module
+
+---
+ drivers/char/Kconfig           |  7 +++++++
+ drivers/char/Makefile          |  3 ++-
+ drivers/char/examples/Makefile | 13 +++++++++++++
+ drivers/char/examples/hello1.c | 21 +++++++++++++++++++++
+ 4 files changed, 43 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/char/examples/Makefile
+ create mode 100644 drivers/char/examples/hello1.c
+
+diff --git a/drivers/char/Kconfig b/drivers/char/Kconfig
+index 72bedad..a9fb0fd 100644
+--- a/drivers/char/Kconfig
++++ b/drivers/char/Kconfig
+@@ -6,6 +6,13 @@ menu "Character devices"
+ 
+ source "drivers/tty/Kconfig"
+ 
++config EXAMPLES
++       tristate "Enable Examples"
++       default m
++       ---help---
++       Enable compilation option for Embedded Linux Primer
++       driver examples
++
+ config DEVKMEM
+ 	bool "/dev/kmem virtual device support"
+ 	default y
+diff --git a/drivers/char/Makefile b/drivers/char/Makefile
+index 7ff1d0d..f343648 100644
+--- a/drivers/char/Makefile
++++ b/drivers/char/Makefile
+@@ -52,8 +52,9 @@ obj-$(CONFIG_TELCLOCK)		+= tlclk.o
+ obj-$(CONFIG_MWAVE)		+= mwave/
+ obj-$(CONFIG_AGP)		+= agp/
+ obj-$(CONFIG_PCMCIA)		+= pcmcia/
+-
++obj-$(CONFIG_EXAMPLES)          += examples/
+ obj-$(CONFIG_HANGCHECK_TIMER)	+= hangcheck-timer.o
++
+ obj-$(CONFIG_TCG_TPM)		+= tpm/
+ 
+ obj-$(CONFIG_PS3_FLASH)		+= ps3flash.o
+diff --git a/drivers/char/examples/Makefile b/drivers/char/examples/Makefile
+new file mode 100644
+index 0000000..3fd5f22
+--- /dev/null
++++ b/drivers/char/examples/Makefile
+@@ -0,0 +1,13 @@
++# Makefile for compiling out-of-tree
++# From Free Electrons
++
++ifneq ($(KERNELRELEASE),)
++obj-$(CONFIG_EXAMPLES) += hello1.o
++# obj-$(CONFIG_EXAMPLES) += hello2.o
++# obj-$(CONFIG_EXAMPLES) += hello3.o
++else
++KDIR := ~/BeagleBoard/bb-kernel/KERNEL
++
++all:
++	$(MAKE) -C $(KDIR) M=$$PWD
++endif
+diff --git a/drivers/char/examples/hello1.c b/drivers/char/examples/hello1.c
+new file mode 100644
+index 0000000..17ec4b2
+--- /dev/null
++++ b/drivers/char/examples/hello1.c
+@@ -0,0 +1,21 @@
++/* Example Minimal Character Device Driver */
++#include <linux/module.h>
++
++static int __init hello_init(void)
++{
++    printk(KERN_INFO "Hello Example Init\n");
++
++    return 0;
++}
++
++static void __exit hello_exit(void)
++{
++    printk(KERN_INFO "Hello Example Exit\n");
++}
++
++module_init(hello_init);
++module_exit(hello_exit);
++
++MODULE_AUTHOR("Chris Hallinan");
++MODULE_DESCRIPTION("Hello World Example");
++MODULE_LICENSE("GPL");
+-- 
+1.9.1
+
+
+From 618b399f1c5d42c0e320f4b2d0cc34624bbd229f Mon Sep 17 00:00:00 2001
+From: Leihao <weil@rose-hulman.edu>
+Date: Thu, 30 Oct 2014 15:05:38 -0400
+Subject: [PATCH 2/2] modified hello2 to pass two parametes
+
+---
+ drivers/char/examples/hello2par.c | 34 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+ create mode 100644 drivers/char/examples/hello2par.c
+
+diff --git a/drivers/char/examples/hello2par.c b/drivers/char/examples/hello2par.c
+new file mode 100644
+index 0000000..d774704
+--- /dev/null
++++ b/drivers/char/examples/hello2par.c
+@@ -0,0 +1,34 @@
++/* Example Minimal Character Device Driver */
++// From page 211 of Embedded Linux Primer by Christopher Hallinan
++// Modified by Leihao Wei, passing two parameters
++#include <linux/module.h>
++
++static int debug_enable = 0;
++module_param(debug_enable, int, 0);
++MODULE_PARM_DESC(debug_enable, "Enable module debug mode.");
++
++static int foo = 0;
++module_param(foo, int, 0);
++MODULE_PARM_DESC(foo, "Meow OR Bark");
++
++
++static int __init hello_init(void) {
++    /* Now print value of new module parameter */
++    printk("Hello Example Init - debug mode is %s\n",
++           debug_enable ? "enabled" : "disabled");
++
++    printk("Hello Example Dog and cat -  foo is %s\n", foo ? "Meow" : "Bark");	
++    return 0;
++}
++
++static void __exit hello_exit(void)
++{
++    printk(KERN_INFO "Hello Example Exit\n");
++}
++
++module_init(hello_init);
++module_exit(hello_exit);
++
++MODULE_AUTHOR("Chris Hallinan, entered by Mark A. Yoder");
++MODULE_DESCRIPTION("Hello World Example with parameter");
++MODULE_LICENSE("GPL");
+-- 
+1.9.1
+
