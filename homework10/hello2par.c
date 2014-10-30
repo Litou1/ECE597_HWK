@@ -1,6 +1,6 @@
 /* Example Minimal Character Device Driver */
 // From page 211 of Embedded Linux Primer by Christopher Hallinan
-// Modified by Leihao Wei, passing two parameters
+// Modified by Leihao Wei so it can pass two parameters
 #include <linux/module.h>
 
 static int debug_enable = 0;
